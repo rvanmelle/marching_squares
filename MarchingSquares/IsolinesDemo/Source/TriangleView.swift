@@ -118,8 +118,31 @@ class TriangleView: UIView {
         }
 
         let isoLines: [Double] = [-50, 0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750]
+        // let isoLines: [Double] = [-50, 0, 50, 100, 150]
+        // let isoLines: [Double] = [-50, 0, 50, 100, 150, 200, 250, 300, 350, 400, 450]
         for iso in Array<Double>(isoLines) {
-            let contour = computeContours(triangles: triangleWithAltitudes, contour: iso)
+            let contours = computeIsolineContours(triangles: triangleWithAltitudes, contour: iso)
+            if contours.isEmpty {
+                continue
+            }
+            for contour in contours {
+                let path = CGMutablePath()
+                path.move(to: CGPoint(x: contour.first!.x, y: contour.first!.y))
+                for point in contour {
+                    path.addLine(to: CGPoint(x: point.x, y: point.y))
+                }
+                // path.closeSubpath()
+                let s = CAShapeLayer()
+                s.path = path
+                s.strokeColor = UIColor.green.cgColor
+                s.fillColor = UIColor.clear.cgColor
+                s.lineWidth = 2.0
+                layer.addSublayer(s)
+            }
+        }
+
+        for iso in Array<Double>(isoLines) {
+            let contour = computeContourLineSegments(triangles: triangleWithAltitudes, contour: iso)
             for segment in contour {
                 let s = CAShapeLayer()
                 let path = CGMutablePath()
@@ -127,9 +150,12 @@ class TriangleView: UIView {
                 path.addLine(to: CGPoint(x: segment.point2.x, y: segment.point2.y))
                 s.path = path
                 s.strokeColor = UIColor.black.cgColor
+                s.lineWidth = 0.5
                 layer.addSublayer(s)
             }
         }
+
+
     }
 
     @IBAction func singleTap(recognizer: UITapGestureRecognizer) {

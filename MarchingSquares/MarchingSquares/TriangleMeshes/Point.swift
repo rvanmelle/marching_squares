@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// This is a simple 2-D point with an altitude
 public struct Point: Hashable {
 
     public let x: Double
@@ -32,6 +33,5 @@ public struct Point: Hashable {
             let dy = (point1.y - point2.y) * ratio
             return Point(x: point2.x + dx, y: point2.y + dy, altitude: altitude)
         }
-        // return Point(x: (point1.x + point2.x) / 2.0, y: (point1.y + point2.y) / 2.0, altitude: (point1.altitude + point2.altitude) / 2.0)
     }
 }

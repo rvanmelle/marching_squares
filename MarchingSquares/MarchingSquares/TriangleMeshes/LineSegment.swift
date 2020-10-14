@@ -16,4 +16,15 @@ public struct LineSegment: Hashable {
 
     public let point1: Point
     public let point2: Point
+
+    var points: [Point] {
+        return [point1, point2]
+    }
+
+    var first: Point {
+        point1
+    }
+    var last: Point {
+        point2
+    }
 }
